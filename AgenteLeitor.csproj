@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <!-- .NET Framework 4.8: as DLLs da Suprema sao de 2012 ("UniFinger Engine
+         SDK 3.4 .NET 1.1 Wrapper"). .NET moderno (Core/5+) nao carrega bem
+         wrapper desse tipo. -->
+    <TargetFramework>net48</TargetFramework>
+    <!-- As DLLs nativas sao 32-bit. Em x64 ou AnyCPU o P/Invoke falha ao
+         carregar com BadImageFormatException. -->
+    <PlatformTarget>x86</PlatformTarget>
+    <Nullable>disable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>AgenteLeitor</AssemblyName>
+    <RootNamespace>AgenteLeitor</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="Suprema.UFScanner">
+      <HintPath>libs\Suprema.UFScanner.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <!-- O SDK carrega estes arquivos pelo nome, no diretorio do executavel:
+       precisam estar do lado do .exe, nao so na pasta libs. -->
+  <ItemGroup>
+    <None Include="libs\UFScanner.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="libs\UFLicense.dat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

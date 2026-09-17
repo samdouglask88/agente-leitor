@@ -1,0 +1,7 @@
+bin/
+obj/
+
+# SDK da Suprema/Xperix — binario e licenca de terceiro, nao versionado.
+# Ver libs/README.md.
+libs/*.dll
+libs/*.dat

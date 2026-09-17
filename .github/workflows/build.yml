@@ -1,0 +1,68 @@
+name: Build Agente Leitor (.exe)
+
+# O agente so compila no Windows: depende das DLLs nativas de 32 bits da
+# Suprema. Nenhuma maquina Linux gera esse executavel, e .NET nao faz
+# cross-compile para net48 com wrapper nativo.
+#
+# ATENCAO: este workflow SO PASSA se os arquivos do SDK estiverem em libs/.
+# Eles nao estao versionados aqui de proposito (ver libs/README.md). Para o
+# build funcionar, coloque-os num secret ou faca commit numa branch privada.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Baixar o codigo
+        uses: actions/checkout@v4
+
+      - name: Instalar .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Conferir que o SDK da Suprema esta presente
+        shell: bash
+        run: |
+          # Falhar aqui, com mensagem clara, e melhor que um erro de
+          # compilacao sobre HintPath que nao diz o que fazer.
+          test -f libs/Suprema.UFScanner.dll || {
+            echo "ERRO: libs/ esta vazia. Veja libs/README.md."; exit 1; }
+
+      - name: Compilar (Release, x86)
+        shell: bash
+        run: |
+          dotnet build AgenteLeitor.csproj \
+            --configuration Release \
+            -p:PlatformTarget=x86 \
+            --verbosity normal
+
+      - name: Conferir o que saiu
+        shell: bash
+        run: |
+          saida=bin/Release/net48
+          ls -la "$saida"
+          # Sem o .exe nao ha o que publicar: falhar aqui evita o artefato
+          # vazio que ja enganou a equipe uma vez.
+          test -f "$saida/AgenteLeitor.exe" || { echo "ERRO: AgenteLeitor.exe nao foi gerado"; exit 1; }
+          test -f "$saida/UFScanner.dll"    || { echo "ERRO: UFScanner.dll nao foi copiada"; exit 1; }
+          test -f "$saida/UFLicense.dat"    || { echo "ERRO: UFLicense.dat nao foi copiada"; exit 1; }
+
+      # Sem isto o zip sai so com o .exe e as DLLs, e quem esta na recepcao
+      # teria que copiar pasta na mao e lembrar de abrir o programa todo dia.
+      - name: Juntar o instalador ao pacote
+        shell: bash
+        run: |
+          saida=bin/Release/net48
+          cp instalar.ps1 desinstalar.ps1 README.md "$saida/"
+          ls -la "$saida"
+
+      - name: Publicar o executavel
+        uses: actions/upload-artifact@v4
+        with:
+          name: agente-leitor-windows
+          path: bin/Release/net48/
+          if-no-files-found: error
