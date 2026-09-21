@@ -2,7 +2,7 @@
 
 Existe por um motivo pratico: o agente de verdade so roda no Windows (as
 bibliotecas da Suprema sao nativas de 32 bits e nao ha versao Linux em maos),
-mas o desenvolvimento do UltraAcesso acontece no Linux. Sem isto, qualquer
+mas o desenvolvimento do sistema acontece no Linux. Sem isto, qualquer
 mexida na tela de coleta so podia ser testada em outra maquina, com leitor
 espetado e alguem disponivel para encostar o dedo.
 
@@ -20,7 +20,7 @@ Uso:
     python3 agente-leitor/simulador.py --timeout       # simula ninguem encostando
     python3 agente-leitor/simulador.py --porta 5010
 
-Depois abra o UltraAcesso NO NAVEGADOR DESTA MESMA MAQUINA — a tela chama
+Depois abra o sistema NO NAVEGADOR DESTA MESMA MAQUINA — a tela chama
 localhost, entao navegador e agente (ou simulador) precisam estar juntos.
 """
 import argparse
@@ -140,7 +140,7 @@ def main():
 
     servidor = HTTPServer(("127.0.0.1", args.porta), Handler)
     print(f"Simulador no ar em http://localhost:{args.porta}/  (modo: {Handler.modo})")
-    print("Abra o UltraAcesso no navegador DESTA maquina e clique em Ler.")
+    print("Abra o sistema no navegador DESTA maquina e clique em Ler.")
     print("Ctrl+C para encerrar.")
     try:
         servidor.serve_forever()

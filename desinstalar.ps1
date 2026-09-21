@@ -2,8 +2,8 @@
 
 $ErrorActionPreference = "Continue"
 
-$INSTALL_DIR = "C:\UltraAcesso\agente-leitor"
-$TASK_NAME   = "UltraAcesso-AgenteLeitor"
+$INSTALL_DIR = "C:\AgenteLeitor"
+$TASK_NAME   = "AgenteLeitor"
 
 Write-Host ""
 Write-Host "Desinstalando o Agente de Leitura de Digital"

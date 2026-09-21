@@ -1,7 +1,8 @@
 # Agente de leitura de digital
 
 Programa que roda **na maquina da recepcao**, junto com o navegador, e serve
-de ponte entre a tela do UltraAcesso e o leitor de digital USB.
+de ponte entre a tela de um sistema de controle de acesso e o leitor de
+digital USB.
 
 O navegador nao consegue acender um leitor USB sozinho. Por isso a tela de
 cadastro de funcionario chama `http://localhost:5009/api/capture.json` e
@@ -34,15 +35,27 @@ Descompacte o zip inteiro e, dentro da pasta, abra o PowerShell e rode:
 .\instalar.ps1
 ```
 
-Ele copia tudo para `C:\UltraAcesso\agente-leitor`, registra o agente para
+Ele copia tudo para `C:\AgenteLeitor`, registra o agente para
 **iniciar junto com o Windows**, sobe na hora e confere se o leitor foi
 reconhecido — dizendo na tela o que deu certo e o que faltou.
 
 Para remover: `.\desinstalar.ps1`.
 
+> **Quem instalou uma versao anterior a esta:** a pasta de instalacao e o nome
+> da tarefa agendada mudaram. O `desinstalar.ps1` desta versao procura os nomes
+> NOVOS e nao acha a instalacao antiga — ela fica para tras, iniciando junto com
+> o Windows. Antes de instalar, remova a antiga na mao:
+>
+> ```powershell
+> Unregister-ScheduledTask -TaskName "<nome antigo da tarefa>" -Confirm:$false
+> Remove-Item -Recurse -Force "<pasta antiga>"
+> ```
+>
+> Em duvida sobre os nomes antigos: `Get-ScheduledTask | Where-Object TaskName -like "*AgenteLeitor*"`.
+
 ### Por que inicia com o usuario, e nao como servico
 
-O instalador do UltraAcesso registra o servidor como SYSTEM e `-AtStartup`.
+O instalador de um servidor registra o servico como SYSTEM e `-AtStartup`.
 Aqui e `-AtLogOn`, com o usuario interativo, de proposito: o agente conversa
 com um leitor USB e atende o navegador daquela pessoa em `localhost`. Como
 SYSTEM, na sessao 0, nao alcanca nem um nem outro.
@@ -85,7 +98,7 @@ devolve:
 ```
 
 Em qualquer erro, devolve so o `status` com uma frase em portugues — e a
-propria tela do UltraAcesso mostra essa frase para o operador, porque o
+propria tela do sistema mostra essa frase para o operador, porque o
 JavaScript ja joga `status` na tela.
 
 ## Detalhes que custaram a ser descobertos
@@ -98,7 +111,7 @@ equipamento recusar a gravacao.
 **Tem que ser x86.** As DLLs nativas sao de 32 bits; compilar em x64 ou
 AnyCPU quebra no carregamento com `BadImageFormatException`.
 
-**O envelope `1{`.** O UltraAcesso descarta tudo ate a primeira chave e usa o
+**O envelope `1{`.** O sistema consumidor descarta tudo ate a primeira chave e usa o
 que vem depois (`fingerprint.py`, `to_henry_format`). O agente ja entrega
 nesse formato.
 

@@ -1,6 +1,6 @@
 # Instalador do agente de leitura de digital.
 #
-# Diferente do instalador do UltraAcesso, que registra o servico como SYSTEM
+# Diferente do instalador de um servidor, que registra o servico como SYSTEM
 # e -AtStartup: o agente PRECISA rodar na sessao de quem esta usando o
 # computador. Ele conversa com um leitor USB e atende o navegador daquela
 # pessoa em localhost - como SYSTEM, na sessao 0, nao enxerga nem um nem
@@ -11,8 +11,8 @@
 
 $ErrorActionPreference = "Stop"
 
-$INSTALL_DIR = "C:\UltraAcesso\agente-leitor"
-$TASK_NAME   = "UltraAcesso-AgenteLeitor"
+$INSTALL_DIR = "C:\AgenteLeitor"
+$TASK_NAME   = "AgenteLeitor"
 $EXE         = "$INSTALL_DIR\AgenteLeitor.exe"
 $PORTA       = 5009
 
@@ -21,7 +21,7 @@ function Write-Aviso ($m) { Write-Host "  [aviso] $m"  -ForegroundColor Yellow }
 function Write-Erro  ($m) { Write-Host "  [erro] $m"   -ForegroundColor Red }
 
 Write-Host ""
-Write-Host "Instalador do Agente de Leitura de Digital - UltraAcesso"
+Write-Host "Instalador do Agente de Leitura de Digital"
 Write-Host "========================================================"
 Write-Host ""
 
@@ -90,7 +90,7 @@ Register-ScheduledTask `
     -Trigger $trigger `
     -Settings $settings `
     -Principal $principal `
-    -Description "Ponte entre o navegador e o leitor de digital do UltraAcesso" | Out-Null
+    -Description "Ponte entre o navegador e o leitor de digital" | Out-Null
 Write-Ok "Configurado para iniciar junto com o Windows"
 
 # --- 6. Subir agora ------------------------------------------------------
@@ -106,7 +106,7 @@ try {
     if ($r.leitores -ge 1) {
         Write-Ok "Leitor de digital reconhecido"
         Write-Host ""
-        Write-Host "  Pronto. Abra o UltraAcesso neste computador e use o botao Ler." -ForegroundColor Green
+        Write-Host "  Pronto. Abra o sistema neste computador e use o botao Ler." -ForegroundColor Green
     } else {
         Write-Aviso "Agente no ar, mas NENHUM leitor encontrado."
         Write-Host "  Espete o leitor e confira o driver no Gerenciador de Dispositivos."

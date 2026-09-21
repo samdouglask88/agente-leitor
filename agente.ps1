@@ -27,7 +27,7 @@ if ([IntPtr]::Size -ne 4) {
     exit 1
 }
 
-Write-Host "Agente de leitura de digital - UltraAcesso (PowerShell)"
+Write-Host "Agente de leitura de digital (PowerShell)"
 Write-Host "Carregando a biblioteca da Suprema..."
 
 # As DLLs ficam em libs\ no repositorio, mas ao lado do .exe quando o projeto
@@ -144,7 +144,7 @@ function Get-Digital {
     # O buffer inteiro de 384 bytes, com os zeros de padding no fim - nada de
     # cortar para o tamanho real, senao o equipamento recusa a gravacao.
     #
-    # O "1{" na frente e o envelope que o UltraAcesso espera: em
+    # O "1{" na frente e o envelope que o sistema consumidor espera: em
     # fingerprint.py, to_henry_format descarta tudo ate a primeira chave.
     $envelope = [System.Text.Encoding]::ASCII.GetBytes("1{")
     $corpo = New-Object byte[] ($envelope.Length + $SLOT_SUPREMA_2001)

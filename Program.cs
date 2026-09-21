@@ -1,4 +1,4 @@
-// Agente de leitura de digital do UltraAcesso.
+// Agente de leitura de digital para sistemas de controle de acesso.
 //
 // O navegador nao consegue acender um leitor USB sozinho. Por isso a tela de
 // cadastro de funcionario (form_modal_funcionario.js) chama
@@ -47,7 +47,7 @@ internal static class Program
             porta = informada;
         }
 
-        Console.WriteLine("Agente de leitura de digital - UltraAcesso");
+        Console.WriteLine("Agente de leitura de digital");
         Console.WriteLine("Inicializando o SDK da Suprema...");
 
         _manager = new UFScannerManager(null);
@@ -195,7 +195,7 @@ internal static class Program
         // O buffer inteiro de 384 bytes vai, com os zeros de padding no fim.
         // Nada de cortar para `tamanho`.
         //
-        // O "1{" na frente e o envelope que o UltraAcesso espera: em
+        // O "1{" na frente e o envelope que o sistema consumidor espera: em
         // fingerprint.py, to_henry_format joga fora tudo ate a primeira chave
         // e usa o que vem depois.
         byte[] envelope = Encoding.ASCII.GetBytes("1{");
@@ -268,7 +268,7 @@ internal static class Program
 
     private static void Responder(HttpListenerContext ctx, string corpo)
     {
-        // A tela do UltraAcesso e servida de outro endereco (o servidor), e o
+        // A tela do sistema e servida de outro endereco (o servidor), e o
         // agente responde de localhost: para o navegador sao origens
         // diferentes. Sem este cabecalho ele bloqueia a resposta e o operador
         // ve o mesmo "nao acontece nada" de antes.
